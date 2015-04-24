@@ -18,10 +18,10 @@ A simple demonstration daemon for the MLX90620/90621 temperature sensors. Based 
   This code is a demo for educational purposes. Bugs can be reported to info@bofinry.org
 
 ## History
-  0.1.0 _ Initial release
+  0.1.0 - Initial release
 
 ## Acknopwledgements
 
-  THe daemon portion of this demo is based upon the PIIR application, http://github.com/strean/piir.
+  The daemon portion of this demo is based upon the PIIR application by Mike Strean -http://github.com/strean/piir.
 
-  As a programmer I stand on the shoulders of those who came before me as my code lies on top of the libraries they wrote. Thousands of people whose names I will never know helped write this...
+  As a programmer I stand on the shoulders of those who came before me just as my code lies on top of the libraries they wrote. Thousands of people whose names I will never know helped write this... ;-)

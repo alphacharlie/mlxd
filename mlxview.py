@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #Demo code 
 #
 #   simple demonstration script  showing real-time thermal Imaging 
@@ -35,9 +37,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # IR registration parameters
-ROTATION = np.deg2rad(90)
+ROT = np.deg2rad(90)
 SCALE = (36.2, 36.4)
-TRANSLATION = (530, 170)
+OFFSET = (530, 170)
 
 def getImage():
     fn = r'/home/pi/tmp.jpg';
@@ -78,10 +80,8 @@ with picamera.PiCamera() as camera:
     rgb_img = np.delete(rgba_img, 3, 2) 
    
     # align the IR array with the camera
-    tform = transform.AffineTransform(scale=SCALE, rotation=ROTATION,
-                                    translation=TRANSLATION)
-    ir_aligned = transform.warp(rgb_img, tform.inverse, mode='constant',
-                                    output_shape=im.shape)
+    tform = transform.AffineTransform(scale=SCALE, rotation=ROT, translation=OFFSET)
+    ir_aligned = transform.warp(rgb_img, tform.inverse, mode='constant', output_shape=im.shape)
     # turn it back into a ubyte so it'll display on the preview overlay
     ir_byte = img_as_ubyte(ir_aligned)
     #add the overlay
@@ -94,8 +94,6 @@ with picamera.PiCamera() as camera:
         ir_trimmed = ir_raw[0:128]
         ir = np.frombuffer(ir_trimmed, np.uint16)
         ir = ir.reshape((16, 4))[::-1, ::-1]
-        # ir = np.flipud(ir)
-        # ir = np.fliplr(ir)
         ir = img_as_float(ir)  
         p2, p98 = np.percentile(ir, (2, 98))
         ir = exposure.rescale_intensity(ir, in_range=(p2, p98))
@@ -105,10 +103,8 @@ with picamera.PiCamera() as camera:
         rgba_img = cmap(ir)
         rgb_img = np.delete(rgba_img, 3, 2)    
         # align the IR array with the image
-        tform = transform.AffineTransform(scale=SCALE, rotation=ROTATION,
-                                        translation=TRANSLATION)
-        ir_aligned = transform.warp(rgb_img, tform.inverse, mode='constant',
-                                        output_shape=im.shape)
+        tform = transform.AffineTransform(scale=SCALE, rotation=ROT, translation=OFFSET)
+        ir_aligned = transform.warp(rgb_img, tform.inverse, mode='constant', output_shape=im.shape)
         ir_byte = img_as_ubyte(ir_aligned)
 
         o.update(np.getbuffer(ir_byte))
