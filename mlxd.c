@@ -220,12 +220,12 @@ main (int argc, char **argv)
 int
 mlx90620_init()
 {
-    usleep(5000);
-
     if (!bcm2835_init()) return 0;
     bcm2835_i2c_begin();
     bcm2835_i2c_set_baudrate(25000);
-
+    
+    //sleep 5ms per datasheet
+    usleep(5000);
     if ( !mlx90620_read_eeprom() ) return 0;
     if ( !mlx90620_write_trim( EEPROM[0xF7] ) ) return 0;
     if ( !mlx90620_write_config( &EEPROM[0xF5], &EEPROM[0xF6] ) ) return 0;
