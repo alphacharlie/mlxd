@@ -147,8 +147,17 @@ main (int argc, char **argv)
         printf("MLX90620 init failed!\n");
         exit(1);
     }
-
     ta = mlx90620_ta();
+    // If calibration fails then TA will be WAY too high. check and reinitialize if that happens
+    while (ta > 350) 
+    {
+    	printf("Ta out of bounds! Max is 350, reading: %4.8f C\n", ta);
+    	//out of bounds, reset and check again
+    	mlx90620_init();
+    	ta = mlx90620_ta();
+    	usleep(10000);
+    }
+
     printf("Ta = %4.8f C %4.8f F\n\n", ta, ta * (9.0/5.0) + 32.0);
 
     /* To calc parameters */
